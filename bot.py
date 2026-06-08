@@ -76,18 +76,6 @@ def load_data():
 
 load_data()
 
-class KeepAliveHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Nerixton AI is running!")
-    def log_message(self, format, *args):
-        pass
-
-def keep_alive():
-    server = HTTPServer(('0.0.0.0', 5050), KeepAliveHandler)
-    server.serve_forever()
-
 def is_admin(username):
     return username == ADMIN_USERNAME
 
@@ -315,8 +303,6 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"✅ Отправлено: {sent}")
 
 def main():
-    threading.Thread(target=keep_alive, daemon=True).start()
-    
     app = Application.builder().token(TELEGRAM_TOKEN).build()
     
     app.add_handler(CommandHandler("start", start))
